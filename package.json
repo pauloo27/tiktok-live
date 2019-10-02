@@ -1,13 +1,13 @@
 {
   "name": "tiktokdownloader",
   "version": "1.0.0",
-  "description": "",
+  "description": "A simple NodeJS application to download TikTok lives by the share URL.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Pauloo27",
+  "license": "GPLv3",
   "dependencies": {
     "node-fetch": "^2.6.0",
     "url-regex": "^5.0.0"
