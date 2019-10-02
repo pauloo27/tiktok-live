@@ -1,5 +1,5 @@
 {
-  "name": "tiktokdownloader",
+  "name": "tiktoklive",
   "version": "1.0.0",
   "description": "A simple NodeJS application to download TikTok lives by the share URL.",
   "main": "index.js",
