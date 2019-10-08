@@ -10,6 +10,10 @@ First, clone the repository:
 
 In the repository folder, run the command:
 
+> npm install
+
+This will download the dependencies. Now, you can download tiktok lives, run:
+
 > node index.js \<url\>
 
 Here the `<url>` is the live share URL.
