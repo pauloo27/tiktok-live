@@ -7,7 +7,7 @@
     "start": "node index.js"
   },
   "author": "Pauloo27",
-  "license": "GPLv3",
+  "license": "GPL-3.0",
   "dependencies": {
     "node-fetch": "^2.6.0",
     "url-regex": "^5.0.0"
