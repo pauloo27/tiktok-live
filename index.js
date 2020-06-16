@@ -37,7 +37,8 @@ fetch(url)
     liveUrl = liveUrl.split("/").slice(0, 5).join("/")
     liveUrl += ".flv"
 
-    console.log(`Found live URL: ${liveUrl}`);
+    console.log(`Found live playlist (m3u8) URL: ${baseUrl}`);
+    console.log(`Found live flv URL: ${liveUrl}`);
 
     console.log(`Writing live to ${id}.flv. Press Ctrl C to STOP.`)
     
