@@ -29,12 +29,11 @@ fetch(url)
   })
   .then(body => {
     const urls = body.match(urlRegex());
-    console.log(urls);
-    const baseUrl = urls.find(url => url.includes("pull-hls-l1"))
+    const baseUrl = urls.find(url => url.includes("playlist.m3u8"))
 
     let liveUrl = baseUrl;
 
-    liveUrl = liveUrl.replace("pull-hls-l1", "pull-flv-l1");
+    liveUrl = liveUrl.replace("pull-hls", "pull-flv");
     liveUrl = liveUrl.split("/").slice(0, 5).join("/")
     liveUrl += ".flv"
 
