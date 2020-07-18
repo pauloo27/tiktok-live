@@ -1,5 +1,8 @@
 # TikTok Live Downloader
 
+This package downloads a `.FLV` video file from TikTok Lives. It will not download the whole live,
+but from when you started the process until you close it.
+
 ## How to install
 
 First, clone the repository:
