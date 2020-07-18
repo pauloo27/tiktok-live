@@ -29,6 +29,7 @@ fetch(url)
   })
   .then(body => {
     const urls = body.match(urlRegex());
+    console.log(urls);
     const baseUrl = urls.find(url => url.includes("pull-hls-l1"))
 
     let liveUrl = baseUrl;
