@@ -1,4 +1,3 @@
-const urlRegex = require("url-regex");
 const fetch = require("node-fetch");
 const fs = require("fs");
 const http = require("http");
@@ -13,37 +12,29 @@ if (process.argv.length <= 2) {
 
 let url = process.argv[2];
 
-if (url.endsWith('/')) url = url.substring(0, url.length - 1);
-
-const urlParts = url.split("/");
-let id = urlParts[urlParts.length - 1];
-
-if (id.includes("?")) id = id.split("?")[0];
-
 console.log(`URL > ${url}`);
-console.log(`ID > ${id}`);
 
 fetch(url)
   .then(res => {
     return res.text();
   })
-  .then(body => {
-    const urls = body.match(urlRegex());
-    const baseUrl = urls.find(url => url.includes("playlist.m3u8"))
+  .then(async (body) => {
+    const roomId = body.match(/room_id=(\d+)/)[1];
+    const apiURL = `https://www.tiktok.com/api/live/detail/?aid=1988&roomID=${roomId}`;
 
-    let liveUrl = baseUrl;
+    const res = await (await fetch(apiURL)).json();
+    const {title, liveUrl} = res.LiveRoomInfo;
 
-    liveUrl = liveUrl.replace("pull-hls", "pull-flv");
-    liveUrl = liveUrl.split("/").slice(0, 5).join("/")
-    liveUrl += ".flv"
+    const flvUrl = liveUrl.replace("pull-hls", "pull-flv").replace(".m3u8", ".flv").replace("https", "http");
 
-    console.log(`Found live playlist (m3u8) URL: ${baseUrl}`);
-    console.log(`Found live flv URL: ${liveUrl}`);
+    console.log(`Found live "${title}":`);
+    console.log(`m3u8 URL: ${liveUrl}`);
+    console.log(`flv URL: ${flvUrl}`);
 
-    console.log(`Writing live to ${id}.flv. Press Ctrl C to STOP.`)
+    console.log(`Writing live to ${roomId}.flv. Press Ctrl C to STOP.`)
     
-    const file = fs.createWriteStream(`${id}.flv`)
-    http.get(liveUrl, function (response) {
+    const file = fs.createWriteStream(`${roomId}.flv`)
+    http.get(flvUrl, function (response) {
       response.pipe(file);
     });
   });
