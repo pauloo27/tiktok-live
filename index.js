@@ -25,7 +25,7 @@ fetch(url)
     const res = await (await fetch(apiURL)).json();
     const {title, liveUrl} = res.LiveRoomInfo;
 
-    const flvUrl = liveUrl.replace("pull-hls", "pull-flv").replace("/playlist.m3u8", ".flv").replace("https", "http");
+    const flvUrl = liveUrl.replace("pull-hls", "pull-flv").replace("/playlist.m3u8", ".flv").replace("https", "http").replace('.m3u8', '.flv');
 
     console.log(`Found live "${title}":`);
     console.log(`m3u8 URL: ${liveUrl}`);
