@@ -1,40 +1,42 @@
 const fetch = require("node-fetch");
-const fs = require("fs");
-const http = require("http");
+const shell = require("shelljs");
 
 if (process.argv.length <= 2) {
-  console.log('Missing URL.');
-  console.log('Usage: node index.js <tiktok-url>');
+  console.log('Missing username.');
+  console.log('Usage: node index.js <tiktok username>');
   console.log('(the default output folder is ./');
-  console.log('Example: node index.js http://vm.tiktok.com/fMXQa8/');
+  console.log('Example: node index.js charlidamelio');
   process.exit(0);
 }
 
-let url = process.argv[2];
-
-console.log(`URL > ${url}`);
+const username = process.argv[2].trimStart('@');
+const url = `https://www.tiktok.com/@${username}/live`;
 
 fetch(url)
   .then(res => {
     return res.text();
   })
   .then(async (body) => {
-    const roomId = body.match(/room_id=(\d+)/)[1];
+
+    const matches = body.match(/room_id=(\d+)/);
+
+    if (!matches) {
+      console.log('No live stream found.');
+      process.exit(0);
+    }
+
+    const roomId = matches[1];
+
     const apiURL = `https://www.tiktok.com/api/live/detail/?aid=1988&roomID=${roomId}`;
 
     const res = await (await fetch(apiURL)).json();
-    const {title, liveUrl} = res.LiveRoomInfo;
-
-    const flvUrl = liveUrl.replace("pull-hls", "pull-flv").replace("/playlist.m3u8", ".flv").replace("https", "http").replace('.m3u8', '.flv');
+    const { title, liveUrl } = res.LiveRoomInfo;
 
     console.log(`Found live "${title}":`);
     console.log(`m3u8 URL: ${liveUrl}`);
-    console.log(`flv URL: ${flvUrl}`);
 
-    console.log(`Writing live to ${roomId}.flv. Press Ctrl C to STOP.`)
-    
-    const file = fs.createWriteStream(`${roomId}.flv`)
-    http.get(flvUrl,(response) => {
-      response.pipe(file);
-    });
+    const fileName = `${username}-${Date.now()}.mp4`;
+
+    console.log(`Downloading to ${fileName}`);
+    shell.exec(`ffmpeg -i ${liveUrl} -c copy ./${fileName}`);
   });
