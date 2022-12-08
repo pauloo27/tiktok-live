@@ -9,7 +9,8 @@ if (process.argv.length <= 2) {
   process.exit(0);
 }
 
-const username = process.argv[2].trimStart('@');
+const input = process.argv[2];
+const username = input.startsWith('@') ? input.substring(1) : input;
 const url = `https://www.tiktok.com/@${username}/live`;
 
 fetch(url)
