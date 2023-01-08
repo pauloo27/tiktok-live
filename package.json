@@ -10,6 +10,7 @@
   "author": "Pauloo27",
   "license": "GPL-3.0",
   "dependencies": {
+    "commander": "^9.5.0",
     "node-fetch": "^2.6.7",
     "shelljs": "^0.8.5"
   }

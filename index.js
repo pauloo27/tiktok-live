@@ -1,28 +1,41 @@
+const { program } = require("commander");
 const fetch = require("node-fetch");
 const shell = require("shelljs");
+const fs = require("fs");
+const path = require("path");
 
-if (process.argv.length <= 2) {
-  console.log('Missing username.');
-  console.log('Usage: node index.js <tiktok username>');
-  console.log('(the default output folder is ./');
-  console.log('Example: node index.js charlidamelio');
-  process.exit(0);
+program
+  .argument("<username>", "live username")
+  .option(
+    "--output <path>",
+    "output file or folder path (eg ./folder or ./folder/file.mp4)",
+    "downloads"
+  )
+  .option("--format <format>", "output format", "mp4");
+
+program.parse();
+
+const options = program.opts();
+const args = program.args;
+
+if (format != 'mp4') {
+  console.error("Only mp4 format is supported at the moment");
+  process.exit(1);
 }
 
-const input = process.argv[2];
-const username = input.startsWith('@') ? input.substring(1) : input;
+const input = args[0];
+const username = input.startsWith("@") ? input.substring(1) : input;
 const url = `https://www.tiktok.com/@${username}/live`;
 
 fetch(url)
-  .then(res => {
+  .then((res) => {
     return res.text();
   })
   .then(async (body) => {
-
     const matches = body.match(/room_id=(\d+)/);
 
     if (!matches) {
-      console.log('No live stream found.');
+      console.log("No live stream found.");
       process.exit(0);
     }
 
@@ -36,8 +49,12 @@ fetch(url)
     console.log(`Found live "${title}":`);
     console.log(`m3u8 URL: ${liveUrl}`);
 
-    const fileName = `${username}-${Date.now()}.mp4`;
+    const fileName = options.output.endsWith(options.format)
+      ? options.output
+      : `${options.output.replace(/\/$/, "")}/${username}-${Date.now()}.mp4`;
+
+    fs.mkdirSync(path.dirname(fileName), { recursive: true });
 
     console.log(`Downloading to ${fileName}`);
-    shell.exec(`ffmpeg -i ${liveUrl} -c copy ./${fileName}`);
+    shell.exec(`ffmpeg -i ${liveUrl} -c copy ${fileName}`);
   });
