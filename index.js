@@ -18,6 +18,8 @@ program.parse();
 const options = program.opts();
 const args = program.args;
 
+const format = options.format;
+
 if (format != 'mp4') {
   console.error("Only mp4 format is supported at the moment");
   process.exit(1);
