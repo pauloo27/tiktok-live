@@ -1,3 +1,7 @@
+# Archived
+
+> ⚠ This project is archived, and will not receive any updates.
+
 # TikTok Live Downloader
 
 This package downloads a `.mp4` video file from TikTok Lives. It will not download the whole live,
